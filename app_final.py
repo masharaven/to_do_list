@@ -2,15 +2,25 @@ import logging
 import os
 from contextlib import asynccontextmanager
 from typing import Optional
-
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+load_dotenv()
 
-APP_NAME = os.getenv("APP_NAME", "Список дел")
-APP_AUTHOR = os.getenv("APP_AUTHOR", "Не указан")
-APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
-MAX_TASKS = int(os.getenv("MAX_TASKS", "100"))
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+def require_env(name: str) -> str:
+    """Берёт переменную из окружения; если её нет, останавливает запуск с понятной ошибкой."""
+    value = os.getenv(name)
+    if value is None:
+        raise RuntimeError(
+            f"Не задана переменная {name}. Скопируйте .env.example в .env"
+        )
+    return value
+
+APP_NAME = require_env("APP_NAME")
+APP_AUTHOR = require_env("APP_AUTHOR")
+APP_VERSION = require_env("APP_VERSION")
+MAX_TASKS = int(require_env("MAX_TASKS")
+LOG_LEVEL = require_env("LOG_LEVEL").upper()
 
 logging.basicConfig(
     level=LOG_LEVEL,
