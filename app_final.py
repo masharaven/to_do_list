@@ -8,7 +8,6 @@ from pydantic import BaseModel, Field
 load_dotenv()
 
 def require_env(name: str) -> str:
-    """Берёт переменную из окружения; если её нет, останавливает запуск с понятной ошибкой."""
     value = os.getenv(name)
     if value is None:
         raise RuntimeError(
@@ -19,7 +18,7 @@ def require_env(name: str) -> str:
 APP_NAME = require_env("APP_NAME")
 APP_AUTHOR = require_env("APP_AUTHOR")
 APP_VERSION = require_env("APP_VERSION")
-MAX_TASKS = int(require_env("MAX_TASKS")
+MAX_TASKS = int(require_env("MAX_TASKS"))
 LOG_LEVEL = require_env("LOG_LEVEL").upper()
 
 logging.basicConfig(
